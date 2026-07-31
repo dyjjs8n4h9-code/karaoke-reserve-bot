@@ -1,20 +1,31 @@
 import asyncio
 
 from aiogram import Bot, Dispatcher
+from aiogram.client.default import DefaultBotProperties
+from aiogram.enums import ParseMode
 
-from config import BOT_TOKEN
+
 from booking import router
+from config import BOT_TOKEN
+from database import init_db
 
 
-bot = Bot(token=BOT_TOKEN)
+bot = Bot(
+    token=BOT_TOKEN,
+    default=DefaultBotProperties(parse_mode=ParseMode.HTML)
+)
 dp = Dispatcher()
 
 dp.include_router(router)
 
 
 async def main():
+    await init_db()
+
     print("✅ Karaoke Reserve запущен!")
+
     await dp.start_polling(bot)
+
 
 
 if __name__ == "__main__":
